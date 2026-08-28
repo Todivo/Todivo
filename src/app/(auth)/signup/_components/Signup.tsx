@@ -26,7 +26,7 @@ export default function Signup() {
           닉네임
         </label>
         <input
-          className="mb-4 h-14 w-100 rounded-xl border border-gray-200 px-2 py-4"
+          className="mb-4 h-14 w-100 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
           id="nickname"
           type="text"
           placeholder="닉네임을 입력하세요"
@@ -36,7 +36,7 @@ export default function Signup() {
           이메일
         </label>
         <input
-          className="mb-4 rounded-xl border border-gray-200 px-2 py-4"
+          className="mb-4 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
           id="email"
           type="email"
           placeholder="이메일을 입력하세요"
@@ -48,7 +48,7 @@ export default function Signup() {
         <div className="relative">
           <input
             id="password"
-            className="y-4 mb-4 w-full rounded-xl border border-gray-200 px-2 py-4 pr-10"
+            className="y-4 mb-4 w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
             type={passwordVisible ? "text" : "password"}
             placeholder="비밀번호를 입력하세요"
           />
@@ -81,7 +81,7 @@ export default function Signup() {
         <div className="relative">
           <input
             id="passwordConfirm"
-            className="y-4 mb-4 w-full rounded-xl border border-gray-200 px-2 py-4 pr-10"
+            className="y-4 mb-4 w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
             type={passwordVisible ? "text" : "password"}
             placeholder="비밀번호를 입력하세요"
           />
