@@ -36,7 +36,23 @@ export default function Login() {
             type="button"
             className="absolute top-1/2 right-3 -translate-y-1/2"
             onClick={() => setPasswordVisible((prev) => !prev)}
-          ></button>
+          >
+            {passwordVisible ? (
+              <Image
+                src="/icons/eye-off.svg"
+                alt="비밀번호 숨기기"
+                width={20}
+                height={20}
+              />
+            ) : (
+              <Image
+                src="/icons/eye.svg"
+                alt="비밀번호 보기"
+                width={20}
+                height={20}
+              />
+            )}
+          </button>
         </div>
         <button
           className="mt-12 mb-6 h-14 w-100 rounded-xl bg-primary px-4 py-4 text-white"
