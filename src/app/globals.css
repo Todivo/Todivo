@@ -7,10 +7,12 @@
 
 @theme inline {
   --font-baloo: var(--font-baloo);
+  --font-pretendard: var(--font-pretendard);
 }
 
 body {
-  font-family: var(--font-baloo), sans-serif;
+  font-family: var(--font-pretendard), sans-serif;
+  box-sizing: border-box;
 }
 
 
