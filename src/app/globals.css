@@ -13,8 +13,8 @@
 body {
   font-family: var(--font-pretendard), sans-serif;
   box-sizing: border-box;
+  color: var(--color-text-primary);
 }
-
 
 /* @theme inline {
   --color-background: var(--background);
@@ -36,7 +36,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 } */
 
-
 @theme {
-  --color-primary: #2DD4BF;
+  --color-primary: #2dd4bf;
+  --color-text-primary: #121212;
+  --color-secondary-primary: #737373;
 }
