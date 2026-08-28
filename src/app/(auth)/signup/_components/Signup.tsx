@@ -45,10 +45,10 @@ export default function Signup() {
         <label className="mb-2" htmlFor="password">
           비밀번호
         </label>
-        <div className="relative">
+        <div className="relative mb-4">
           <input
             id="password"
-            className="y-4 mb-4 w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
+            className="w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
             type={passwordVisible ? "text" : "password"}
             placeholder="비밀번호를 입력하세요"
           />
@@ -75,13 +75,11 @@ export default function Signup() {
           </button>
         </div>
 
-        <label className="mb-2" htmlFor="passwordConfirm">
-          비밀번호 확인
-        </label>
-        <div className="relative">
+        <label htmlFor="passwordConfirm">비밀번호 확인</label>
+        <div className="relative mb-4">
           <input
             id="passwordConfirm"
-            className="y-4 mb-4 w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
+            className="w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
             type={passwordVisible ? "text" : "password"}
             placeholder="비밀번호를 입력하세요"
           />
@@ -107,7 +105,12 @@ export default function Signup() {
             )}
           </button>
         </div>
-        <button type="submit">회원가입</button>
+        <button
+          type="submit"
+          className="mt-12 mb-6 h-14 w-100 rounded-xl bg-primary px-4 py-4 text-white"
+        >
+          회원가입
+        </button>
       </form>
       <p className="text-center text-sm">
         이미 계정이 있으신가요?{" "}
