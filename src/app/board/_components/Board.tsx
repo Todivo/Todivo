@@ -1,9 +1,14 @@
+"use client";
+
 import { IoFilterOutline } from "react-icons/io5";
 import List, { BoardItem } from "./List";
 import { CiSearch } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 export default function Board({ data }: { data: BoardItem[] }) {
+  const router = useRouter();
+
   return (
     <main className="bg-[#F2F2F2]">
       <h2 className="text-2xl">소통 게시판</h2>
@@ -18,7 +23,10 @@ export default function Board({ data }: { data: BoardItem[] }) {
       <section>
         <div className="align-center flex flex-col">
           <div className="mb-4 flex justify-end">
-            <button className="align-center flex justify-center gap-2 rounded-full bg-primary px-4 py-0.5 text-white sm:p-4">
+            <button
+              onClick={() => router.push("/board/add")}
+              className="align-center flex justify-center gap-2 rounded-full bg-primary px-4 py-0.5 text-white sm:p-4"
+            >
               <FaPlus className="flex self-center" />
               <span className="align-center flex hidden lg:inline">
                 게시물 작성하기
