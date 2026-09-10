@@ -16,6 +16,14 @@ body {
   color: var(--color-text-primary);
 }
 
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: var(--color-text-secondary);
+}
+
 /* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -38,6 +46,13 @@ body {
 
 @theme {
   --color-primary: #2dd4bf;
+  --color-bg-primary: #dafffa;
   --color-text-primary: #121212;
-  --color-secondary-primary: #737373;
+  --color-text-secondary: #737373;
+  --color-modal-badge: #feefdc;
+  --color-modal-skyblue: #d4efff;
+  --color-modal-blue: #1eacff;
+  --color-modal-orange: #ff8442;
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
 }
