@@ -30,7 +30,7 @@ export default function RootLayout({
       lang="ko"
       className={`h-full ${baloo.variable} ${pretendard.variable}`}
     >
-      <body>{children}</body>
+      <body className="h-full">{children}</body>
     </html>
   );
 }
