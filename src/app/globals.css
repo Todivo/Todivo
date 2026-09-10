@@ -38,6 +38,8 @@ body {
 
 @theme {
   --color-primary: #2dd4bf;
+  --color-bg-primary: #dafffa;
   --color-text-primary: #121212;
   --color-secondary-primary: #737373;
+  --color-white: #fff;
 }
