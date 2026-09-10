@@ -9,8 +9,7 @@ export default function BoardPage() {
     {
       id: 0,
       title: "디지털 정리의 날: 불필요한 할 일 정리하기",
-      description:
-        "오래된 할 일들을 지우는 것만으로도 뿌듯하네요. 여러분은 주기적으로 투두를 정리하시나요?",
+      description: `오래된 할 일들을 지우는 것만으로도 뿌듯하네요.\n 여러분은 주기적으로 투두를 정리하시나요?`,
       userThumbnail: "/images/thumbnail.png",
       userName: "체다치즈",
       count: 6,
