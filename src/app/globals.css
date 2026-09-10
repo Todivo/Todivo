@@ -16,6 +16,14 @@ body {
   color: var(--color-text-primary);
 }
 
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: var(--color-text-secondary);
+}
+
 /* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
