@@ -2,11 +2,66 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+const BE_API_URL = process.env.NEXT_PUBLIC_BE_API_URL;
+const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
+
 export default function Signup() {
+  const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      alert("닉네임, 이메일, 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+    if (password.length < 8) {
+      alert("비밀번호는 8자 이상이어야 합니다.");
+      return;
+    }
+    if (password !== passwordConfirm) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(`${BE_API_URL}${TEAM_ID}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, name, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message ?? "회원가입에 실패했습니다.");
+      }
+
+      alert("회원가입이 완료되었습니다. 로그인해주세요.");
+      router.push("/login");
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : "회원가입 중 오류가 발생했습니다.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="mt-22 flex w-full flex-col items-center">
       <Link href="">
@@ -21,7 +76,7 @@ export default function Signup() {
           todivo
         </h1>
       </Link>
-      <form className="flex flex-col">
+      <form className="flex flex-col" onSubmit={handleSubmit}>
         <label className="mb-2" htmlFor="nickname">
           닉네임
         </label>
@@ -29,6 +84,8 @@ export default function Signup() {
           className="mb-4 h-14 w-100 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
           id="nickname"
           type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder="닉네임을 입력하세요"
         />
 
@@ -39,6 +96,8 @@ export default function Signup() {
           className="mb-4 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
           id="email"
           type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="이메일을 입력하세요"
         />
 
@@ -50,6 +109,8 @@ export default function Signup() {
             id="password"
             className="w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
             type={passwordVisible ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="비밀번호를 입력하세요"
           />
           <button
@@ -80,7 +141,9 @@ export default function Signup() {
           <input
             id="passwordConfirm"
             className="w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
-            type={passwordVisible ? "text" : "password"}
+            type={passwordConfirmVisible ? "text" : "password"}
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
             placeholder="비밀번호를 입력하세요"
           />
           <button
@@ -107,9 +170,10 @@ export default function Signup() {
         </div>
         <button
           type="submit"
-          className="mt-12 mb-6 h-14 w-100 rounded-xl bg-primary px-4 py-4 text-white"
+          disabled={isSubmitting}
+          className="mt-12 mb-6 h-14 w-100 rounded-xl bg-primary px-4 py-4 text-white disabled:opacity-60"
         >
-          회원가입
+          {isSubmitting ? "가입 중..." : "회원가입"}
         </button>
       </form>
       <p className="text-center text-sm">
