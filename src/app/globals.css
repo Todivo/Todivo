@@ -40,6 +40,10 @@ body {
   --color-primary: #2dd4bf;
   --color-bg-primary: #dafffa;
   --color-text-primary: #121212;
-  --color-secondary-primary: #737373;
-  --color-white: #fff;
+  --color-text-secondary: #737373;
+  --color-modal-badge: #feefdc;
+  --color-modal-blue: #d4efff;
+  --color-modal-blue: #ff8442;
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
 }
