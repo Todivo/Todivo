@@ -16,10 +16,10 @@ export default function List({ data }: { data: BoardItem }) {
         <h3 className="mb-4 text-lg leading-8 font-bold text-text-primary">
           {data.title}
         </h3>
-        <p className="mb-6 leading-8 whitespace-pre-line text-[#737373]">
+        <p className="mb-6 leading-8 whitespace-pre-line text-text-secondary">
           {data.description}
         </p>
-        <div className="flex items-center gap-2 text-sm leading-4 text-[#737373]">
+        <div className="flex items-center gap-2 text-sm leading-4 text-text-secondary">
           <img
             className="h-5 w-5 rounded-full object-cover"
             src={data.userThumbnail}

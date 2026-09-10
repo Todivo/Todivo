@@ -4,7 +4,7 @@ import CommentSection from "./_components/CommentSection";
 
 export default function BoardDetail() {
   return (
-    <main className="rounded-2xl bg-white">
+    <main className="rounded-xl border border-red-500 bg-white p-14">
       <Form>
         <Form.Header>
           <h2 className="mb-4 text-2xl font-semibold">
@@ -30,7 +30,7 @@ export default function BoardDetail() {
           </p>
         </Form.Body>
         <Form.Footer>
-          <div className="text-[#737373]">
+          <div className="text-text-secondary">
             <span>2025.05.22 </span>
             <span>·</span> <span>조회 281</span>
           </div>

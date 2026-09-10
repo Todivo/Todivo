@@ -9,7 +9,7 @@ export default function Board({ data }: { data: BoardItem[] }) {
       <h2 className="text-2xl">소통 게시판</h2>
       <div className="relative mx-auto block w-fit">
         <input
-          className="h-12 w-108 rounded-full border border-[1px] border-[#737373] bg-white px-5 py-3 text-[#737373]"
+          className="h-12 w-108 rounded-full border border-[1px] border-text-secondary bg-white px-5 py-3 text-text-secondary"
           type="text"
           placeholder="검색해주세요"
         />
