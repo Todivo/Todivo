@@ -42,8 +42,9 @@ body {
   --color-text-primary: #121212;
   --color-text-secondary: #737373;
   --color-modal-badge: #feefdc;
-  --color-modal-blue: #d4efff;
-  --color-modal-blue: #ff8442;
+  --color-modal-skyblue: #d4efff;
+  --color-modal-blue: #1eacff;
+  --color-modal-orange: #ff8442;
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 }
