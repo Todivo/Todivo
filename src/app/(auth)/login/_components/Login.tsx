@@ -5,23 +5,25 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginForm } from "@/schemas/auth";
+
 const BE_API_URL = process.env.NEXT_PUBLIC_BE_API_URL;
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
 
 export default function Login() {
   const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!email.trim() || !password.trim()) {
-      alert("이메일과 비밀번호를 모두 입력해주세요.");
-      return;
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({ resolver: zodResolver(loginSchema) });
 
+  const onSubmit = async ({ email, password }: LoginForm) => {
     setIsSubmitting(true);
     try {
       const res = await fetch(`${BE_API_URL}${TEAM_ID}/auth/login`, {
@@ -66,19 +68,25 @@ export default function Login() {
           todivo
         </h1>
       </Link>
-      <form className="flex flex-col items-center" onSubmit={handleSubmit}>
+      <form
+        className="flex flex-col items-center"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <input
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          {...register("email")}
           className="mb-4 h-14 w-100 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
           placeholder="이메일을 입력해주세요"
         />
+        {errors.email && (
+          <p className="-mt-3 mb-2 self-start text-sm text-red-500">
+            {errors.email.message}
+          </p>
+        )}
         <div className="relative">
           <input
             type={passwordVisible ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
             className="h-14 w-100 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
             placeholder="비밀번호를 입력해주세요"
           />
@@ -104,6 +112,11 @@ export default function Login() {
             )}
           </button>
         </div>
+        {errors.password && (
+          <p className="mt-1 self-start text-sm text-red-500">
+            {errors.password.message}
+          </p>
+        )}
         <button
           className="mt-12 mb-6 h-14 w-100 rounded-xl bg-primary px-4 py-4 text-white disabled:opacity-60"
           type="submit"
