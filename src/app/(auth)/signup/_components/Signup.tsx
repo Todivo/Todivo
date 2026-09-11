@@ -5,6 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema, type SignupForm } from "@/schemas/auth";
+
 const BE_API_URL = process.env.NEXT_PUBLIC_BE_API_URL;
 const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
 
@@ -12,27 +16,15 @@ export default function Signup() {
   const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!name.trim() || !email.trim() || !password.trim()) {
-      alert("닉네임, 이메일, 비밀번호를 모두 입력해주세요.");
-      return;
-    }
-    if (password.length < 8) {
-      alert("비밀번호는 8자 이상이어야 합니다.");
-      return;
-    }
-    if (password !== passwordConfirm) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupForm>({ resolver: zodResolver(signupSchema) });
 
+  const onSubmit = async ({ email, nickname, password }: SignupForm) => {
     setIsSubmitting(true);
     try {
       const res = await fetch(`${BE_API_URL}${TEAM_ID}/auth/signup`, {
@@ -40,7 +32,7 @@ export default function Signup() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, name, password }),
+        body: JSON.stringify({ email, name: nickname, password }),
       });
 
       const data = await res.json();
@@ -76,7 +68,7 @@ export default function Signup() {
           todivo
         </h1>
       </Link>
-      <form className="flex flex-col" onSubmit={handleSubmit}>
+      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <label className="mb-2" htmlFor="nickname">
           닉네임
         </label>
@@ -84,10 +76,14 @@ export default function Signup() {
           className="mb-4 h-14 w-100 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
           id="nickname"
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          {...register("nickname")}
           placeholder="닉네임을 입력하세요"
         />
+        {errors.nickname && (
+          <p className="-mt-3 mb-2 text-sm text-red-500">
+            {errors.nickname.message}
+          </p>
+        )}
 
         <label className="mb-2" htmlFor="email">
           이메일
@@ -96,10 +92,14 @@ export default function Signup() {
           className="mb-4 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
           id="email"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          {...register("email")}
           placeholder="이메일을 입력하세요"
         />
+        {errors.email && (
+          <p className="-mt-3 mb-2 text-sm text-red-500">
+            {errors.email.message}
+          </p>
+        )}
 
         <label className="mb-2" htmlFor="password">
           비밀번호
@@ -109,8 +109,7 @@ export default function Signup() {
             id="password"
             className="w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
             type={passwordVisible ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
             placeholder="비밀번호를 입력하세요"
           />
           <button
@@ -135,6 +134,11 @@ export default function Signup() {
             )}
           </button>
         </div>
+        {errors.password && (
+          <p className="-mt-3 mb-2 text-sm text-red-500">
+            {errors.password.message}
+          </p>
+        )}
 
         <label htmlFor="passwordConfirm">비밀번호 확인</label>
         <div className="relative mb-4">
@@ -142,8 +146,7 @@ export default function Signup() {
             id="passwordConfirm"
             className="w-full rounded-xl border border-gray-200 px-2 py-4 pr-10 focus:ring-1 focus:ring-primary/60 focus:outline-none"
             type={passwordConfirmVisible ? "text" : "password"}
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
+            {...register("passwordConfirm")}
             placeholder="비밀번호를 입력하세요"
           />
           <button
@@ -168,6 +171,11 @@ export default function Signup() {
             )}
           </button>
         </div>
+        {errors.passwordConfirm && (
+          <p className="-mt-3 mb-2 text-sm text-red-500">
+            {errors.passwordConfirm.message}
+          </p>
+        )}
         <button
           type="submit"
           disabled={isSubmitting}
