@@ -1,13 +1,13 @@
 import CommentInput from "./CommentInput";
 import CommentList from "./CommentList";
 
-export default function CommentSection() {
+export default function CommentSection({ postId }: { postId: number }) {
   return (
     <div className="flex flex-col text-center">
       <h4 className="mb-4 self-start">
         댓글 <span className="font-semibold text-primary">3</span>
       </h4>
-      <CommentInput />
+      <CommentInput postId={postId} />
       <div className="flex flex-col">
         <CommentList />
         <CommentList />

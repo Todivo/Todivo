@@ -1,38 +1,33 @@
-export interface BoardItem {
-  id: number;
-  title: string;
-  description: string;
-  userThumbnail: string;
-  userName: string;
-  count: number;
-  commentCount: number;
-  thumbnail: string;
-}
+import { Post } from "@/apis/posts";
+import { stripHtml } from "@/utils/stripHtml";
+import Link from "next/link";
 
-export default function List({ data }: { data: BoardItem }) {
+export default function List({ data }: { data: Post }) {
   return (
-    <div className="flex justify-between border border-[1px] border-black px-4 py-10">
-      <div>
-        <h3 className="mb-4 text-lg leading-8 font-bold text-text-primary">
-          {data.title}
-        </h3>
-        <p className="mb-6 leading-8 whitespace-pre-line text-text-secondary">
-          {data.description}
-        </p>
-        <div className="flex items-center gap-2 text-sm leading-4 text-text-secondary">
-          <img
-            className="h-5 w-5 rounded-full object-cover"
-            src={data.userThumbnail}
-            alt="thumbnail"
-          />
-          <span>{data.userName}</span>
-          <span>·</span>
-          <span>조회 {data.count}</span>
-          <span>·</span>
-          <span>댓글 {data.commentCount}</span>
+    <li className="flex justify-between border border-[1px] border-black px-4 py-10">
+      <Link href={`/board/${data.id}`} className="flex gap-4">
+        <div>
+          <h3 className="mb-4 text-lg leading-8 font-bold text-text-primary">
+            {data.title}
+          </h3>
+          <p className="mb-6 leading-8 whitespace-pre-line text-text-secondary">
+            {stripHtml(data.content)}
+          </p>
+          <div className="flex items-center gap-2 text-sm leading-4 text-text-secondary">
+            <img
+              className="h-5 w-5 rounded-full object-cover"
+              src={data.writer.image ?? "/images/thumbnail.png"}
+              alt="thumbnail"
+            />
+            <span>{data.writer.name}</span>
+            <span>·</span>
+            <span>조회 {data.viewCount}</span>
+            <span>·</span>
+            <span>댓글 {data.commentCount}</span>
+          </div>
         </div>
-      </div>
-      <img src={data.thumbnail} alt="썸네일" />
-    </div>
+        {data.image && <img src={data.image} alt="썸네일" />}
+      </Link>
+    </li>
   );
 }

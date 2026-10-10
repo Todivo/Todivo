@@ -1,14 +1,24 @@
 "use client";
 
 import { IoFilterOutline } from "react-icons/io5";
-import List, { BoardItem } from "./List";
+import List from "./List";
 import { CiSearch } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import { usePosts } from "../hooks/usePosts";
 
-export default function Board({ data }: { data: BoardItem[] }) {
+export default function Board() {
   const router = useRouter();
+  const {
+    data: postsData,
+    isPending,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePosts({ type: "all" });
 
+  const posts = postsData?.pages.flatMap((page) => page.posts) ?? [];
   return (
     <main className="bg-[#F2F2F2]">
       <h2 className="text-2xl">소통 게시판</h2>
@@ -38,12 +48,20 @@ export default function Board({ data }: { data: BoardItem[] }) {
             <IoFilterOutline />
           </div>
         </div>
+        {isPending && <p>불러오는 중...</p>}
+        {isError && <p>에러가 발생했습니다.</p>}
+
         <ul>
-          {data.map((item) => (
-            <List key={item.id} data={item} />
+          {posts.map((post) => (
+            <List key={post.id} data={post} />
           ))}
         </ul>
       </section>
+      {hasNextPage && (
+        <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+          {isFetchingNextPage ? "불러오는 중..." : "더 불러오기"}
+        </button>
+      )}
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Providers from "./provider";
 
 const baloo = localFont({
   src: "../../public/fonts/Baloo2-ExtraBold.ttf",
@@ -30,7 +31,9 @@ export default function RootLayout({
       lang="ko"
       className={`h-full ${baloo.variable} ${pretendard.variable}`}
     >
-      <body className="h-full">{children}</body>
+      <body className="h-full">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
