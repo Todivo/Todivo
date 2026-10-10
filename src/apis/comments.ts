@@ -43,3 +43,38 @@ export async function createComment({
   }
   return response.json();
 }
+
+export interface CommentResponse {
+  comments: Comment[];
+  nextCursor: string | null;
+  totalCount: number;
+}
+
+export interface GetCommentsParams {
+  postId: number;
+  cursor?: string;
+  limit?: number;
+}
+
+export async function getComments({
+  postId,
+  cursor,
+  limit = 10,
+}: GetCommentsParams): Promise<CommentResponse> {
+  const params = new URLSearchParams({ limit: String(limit) });
+
+  if (cursor) params.set("cursor", cursor);
+
+  const accessToken = localStorage.getItem("accessToken");
+
+  const response = await fetch(
+    `${BE_API_URL}${TEAM_ID}/posts/${postId}/comments?${params.toString()}`,
+    {
+      headers: {
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
+    },
+  );
+  if (!response.ok) throw new Error("댓글 목록을 불러오지 못했습니다.");
+  return response.json();
+}

@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import { Comment } from "@/apis/comments";
 
-export default function CommentList() {
+export default function CommentList({ comment }: { comment: Comment }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [content, setContent] = useState("댓글 내용입니다.");
+  const [content, setContent] = useState(comment.content);
 
   return (
     <div className="group flex gap-2 p-4">
@@ -18,14 +18,12 @@ export default function CommentList() {
       ) : (
         <div className="flex flex-col gap-1">
           <div className="flex gap-1">
-            <Image
-              src="/images/user-thumbnail.png"
+            <img
+              src={comment.writer.image ?? "/images/user-thumbnail.png"}
               alt="썸네일"
-              width={32}
-              height={32}
-              className="inline-block rounded-full object-cover"
+              className="inline-block h-8 w-8 rounded-full object-cover"
             />
-            <span className="text-text-secondary">고양이</span>
+            <span className="text-text-secondary">{comment.writer.name}</span>
           </div>
           <p className="text-text-primary">{content}</p>
         </div>

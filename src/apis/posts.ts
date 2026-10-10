@@ -52,3 +52,15 @@ export async function getPosts({
   if (!response.ok) throw new Error("게시글 목록을 불러오지 못했습니다.");
   return response.json();
 }
+
+export async function getPost(postId: number): Promise<Post> {
+  const accessToken = localStorage.getItem("accessToken");
+
+  const response = await fetch(`${BE_API_URL}${TEAM_ID}/posts/${postId}`, {
+    headers: {
+      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+    },
+  });
+  if (!response.ok) throw new Error("게시글을 불러오지 못했습니다.");
+  return response.json();
+}
