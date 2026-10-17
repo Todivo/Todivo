@@ -11,7 +11,12 @@ export default function CommentInput({ postId }: { postId: number }) {
     e.preventDefault();
     const trimmed = content.trim();
     if (!trimmed) return;
-    mutate(trimmed, { onSuccess: () => setContent("") });
+    const submitted = content;
+    mutate(trimmed, {
+      // 요청 중에 새로 입력한 내용은 지우지 않고, 보낸 내용 그대로일 때만 비우기
+      onSuccess: () =>
+        setContent((current) => (current === submitted ? "" : current)),
+    });
   };
 
   return (
