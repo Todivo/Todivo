@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Comment } from "@/apis/comments";
-import { useUpdateComment } from "../../hooks/useUpdateComment";
 import Image from "next/image";
+import { useState } from "react";
+
+import { Comment } from "@/apis/comments";
+
+import { useUpdateComment } from "../../hooks/useUpdateComment";
 
 export default function CommentList({ comment }: { comment: Comment }) {
   const [isEditing, setIsEditing] = useState(false);
