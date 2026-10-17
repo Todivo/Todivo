@@ -52,10 +52,10 @@ export default function Sidebar({
 
   return (
     <div className="relative flex h-full w-90 cursor-pointer flex-col rounded-r-3xl border-r border-text-secondary/20 bg-background pt-26 shadow-md">
-      <div className="absolute top-8 right-8 flex items-center text-xl text-gray-300">
+      <button className="absolute top-8 right-8 flex items-center text-xl text-gray-300">
         <IoChevronForward className="-mr-3" />
         <IoChevronForward />
-      </div>
+      </button>
 
       <Link href="/" className="flex shrink-0 items-center gap-2 pl-8">
         <Image
@@ -160,7 +160,7 @@ export default function Sidebar({
       </ul>
 
       <div className="flex shrink-0 cursor-pointer flex-col gap-4 px-8 pb-6">
-        <div className="flex items-center justify-center gap-2 rounded-4xl border border-primary py-5 text-primary">
+        <div className="flex items-center justify-center gap-2 rounded-4xl border border-primary py-4 text-primary">
           <IoCheckboxOutline className="text-xl" />
           새로운 할 일
         </div>
