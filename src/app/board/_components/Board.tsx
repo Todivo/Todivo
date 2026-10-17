@@ -6,9 +6,20 @@ import { CiSearch } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { usePosts } from "../hooks/usePosts";
+import { useState } from "react";
+import { GetPostsParams } from "@/apis/posts";
+
+type SortType = NonNullable<GetPostsParams["type"]>;
+
+// API type: all = 최신순, best = 조회수순
+const SORT_OPTIONS: { value: SortType; label: string }[] = [
+  { value: "all", label: "최신순" },
+  { value: "best", label: "인기순" },
+];
 
 export default function Board() {
   const router = useRouter();
+  const [sort, setSort] = useState<SortType>("all");
   const {
     data: postsData,
     isPending,
@@ -16,7 +27,7 @@ export default function Board() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = usePosts({ type: "all" });
+  } = usePosts({ type: sort });
 
   const posts = postsData?.pages.flatMap((page) => page.posts) ?? [];
   return (
@@ -43,8 +54,18 @@ export default function Board() {
               </span>
             </button>
           </div>
-          <div className="align-center mb-10 flex justify-end">
-            <span className="mr-2">최신순</span>
+          <div className="mb-10 flex items-center justify-end gap-2">
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortType)}
+              className="cursor-pointer bg-transparent outline-none"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
             <IoFilterOutline />
           </div>
         </div>

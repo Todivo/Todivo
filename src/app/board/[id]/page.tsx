@@ -9,7 +9,7 @@ export default async function BoardDetail({
   const postId = Number(id);
 
   return (
-    <main className="rounded-xl border border-red-500 bg-white p-14">
+    <main className="rounded-xl bg-white p-14">
       <PostDetail postId={postId} />
     </main>
   );
