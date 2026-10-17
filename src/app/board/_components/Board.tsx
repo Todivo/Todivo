@@ -20,6 +20,8 @@ const SORT_OPTIONS: { value: SortType; label: string }[] = [
 export default function Board() {
   const router = useRouter();
   const [sort, setSort] = useState<SortType>("all");
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
   const {
     data: postsData,
     isPending,
@@ -27,20 +29,33 @@ export default function Board() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = usePosts({ type: sort });
+  } = usePosts({ type: sort, search: search || undefined });
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSearch(searchInput.trim());
+  };
 
   const posts = postsData?.pages.flatMap((page) => page.posts) ?? [];
   return (
     <main className="bg-[#F2F2F2]">
       <h2 className="text-2xl">소통 게시판</h2>
-      <div className="relative mx-auto block w-fit">
+      <form onSubmit={handleSearch} className="relative mx-auto block w-fit">
         <input
           className="h-12 w-108 rounded-full border border-[1px] border-text-secondary bg-white px-5 py-3 text-text-secondary"
           type="text"
           placeholder="검색해주세요"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
         />
-        <CiSearch className="absolute top-1/2 right-1 -translate-y-1/2 pr-2 text-3xl text-black" />
-      </div>
+        <button
+          type="submit"
+          aria-label="검색"
+          className="absolute top-1/2 right-1 -translate-y-1/2 pr-2 text-3xl text-black"
+        >
+          <CiSearch />
+        </button>
+      </form>
       <section>
         <div className="align-center flex flex-col">
           <div className="mb-4 flex justify-end">
