@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Login from "./Login";
 
@@ -9,6 +10,15 @@ const pushMock = jest.fn();
 jest.mock("next/navigation", () => ({
   useRouter: () => ({ push: pushMock }),
 }));
+
+function renderLogin() {
+  const queryClient = new QueryClient();
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <Login />
+    </QueryClientProvider>,
+  );
+}
 
 const VALID_EMAIL = "test@example.com";
 const VALID_PASSWORD = "Passw0rd!";
@@ -39,7 +49,7 @@ describe("Login", () => {
   });
 
   it("이메일, 비밀번호 입력창과 로그인 버튼을 렌더링한다", () => {
-    render(<Login />);
+    renderLogin();
 
     expect(
       screen.getByPlaceholderText("이메일을 입력해주세요"),
@@ -53,7 +63,7 @@ describe("Login", () => {
   });
 
   it("빈 값으로 제출하면 유효성 검사 에러 메시지를 보여준다", async () => {
-    render(<Login />);
+    renderLogin();
 
     await fillAndSubmit("", "");
 
@@ -67,7 +77,7 @@ describe("Login", () => {
   });
 
   it("비밀번호 보기 버튼을 누르면 입력 타입이 text로 바뀐다", async () => {
-    render(<Login />);
+    renderLogin();
 
     const passwordInput = screen.getByPlaceholderText(
       "비밀번호를 입력해주세요",
@@ -92,7 +102,7 @@ describe("Login", () => {
       }),
     });
 
-    render(<Login />);
+    renderLogin();
 
     await fillAndSubmit(VALID_EMAIL, VALID_PASSWORD);
 
@@ -125,7 +135,7 @@ describe("Login", () => {
       json: async () => ({ message: "이메일 또는 비밀번호가 올바르지 않습니다." }),
     });
 
-    render(<Login />);
+    renderLogin();
 
     await fillAndSubmit(VALID_EMAIL, VALID_PASSWORD);
 

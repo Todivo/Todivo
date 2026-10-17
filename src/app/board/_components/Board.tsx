@@ -1,25 +1,61 @@
 "use client";
 
 import { IoFilterOutline } from "react-icons/io5";
-import List, { BoardItem } from "./List";
+import List from "./List";
 import { CiSearch } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import { usePosts } from "../hooks/usePosts";
+import { useState } from "react";
+import { GetPostsParams } from "@/apis/posts";
 
-export default function Board({ data }: { data: BoardItem[] }) {
+type SortType = NonNullable<GetPostsParams["type"]>;
+
+// API type: all = 최신순, best = 조회수순
+const SORT_OPTIONS: { value: SortType; label: string }[] = [
+  { value: "all", label: "최신순" },
+  { value: "best", label: "인기순" },
+];
+
+export default function Board() {
   const router = useRouter();
+  const [sort, setSort] = useState<SortType>("all");
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
+  const {
+    data: postsData,
+    isPending,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePosts({ type: sort, search: search || undefined });
 
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSearch(searchInput.trim());
+  };
+
+  const posts = postsData?.pages.flatMap((page) => page.posts) ?? [];
   return (
     <main className="bg-[#F2F2F2]">
       <h2 className="text-2xl">소통 게시판</h2>
-      <div className="relative mx-auto block w-fit">
+      <form onSubmit={handleSearch} className="relative mx-auto block w-fit">
         <input
           className="h-12 w-108 rounded-full border border-[1px] border-text-secondary bg-white px-5 py-3 text-text-secondary"
           type="text"
           placeholder="검색해주세요"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
         />
-        <CiSearch className="absolute top-1/2 right-1 -translate-y-1/2 pr-2 text-3xl text-black" />
-      </div>
+        <button
+          type="submit"
+          aria-label="검색"
+          className="absolute top-1/2 right-1 -translate-y-1/2 pr-2 text-3xl text-black"
+        >
+          <CiSearch />
+        </button>
+      </form>
       <section>
         <div className="align-center flex flex-col">
           <div className="mb-4 flex justify-end">
@@ -33,17 +69,35 @@ export default function Board({ data }: { data: BoardItem[] }) {
               </span>
             </button>
           </div>
-          <div className="align-center mb-10 flex justify-end">
-            <span className="mr-2">최신순</span>
+          <div className="mb-10 flex items-center justify-end gap-2">
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortType)}
+              className="cursor-pointer bg-transparent outline-none"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
             <IoFilterOutline />
           </div>
         </div>
+        {isPending && <p>불러오는 중...</p>}
+        {isError && <p>에러가 발생했습니다.</p>}
+
         <ul>
-          {data.map((item) => (
-            <List key={item.id} data={item} />
+          {posts.map((post) => (
+            <List key={post.id} data={post} />
           ))}
         </ul>
       </section>
+      {hasNextPage && (
+        <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+          {isFetchingNextPage ? "불러오는 중..." : "더 불러오기"}
+        </button>
+      )}
     </main>
   );
 }

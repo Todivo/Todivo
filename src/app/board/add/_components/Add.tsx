@@ -55,7 +55,7 @@ export default function Add() {
   const canSubmit = title.trim() !== "" && content.trim() !== "";
 
   return (
-    <main className="rounded-2xl border border-red-500 bg-white px-10 py-8">
+    <main className="rounded-2xl bg-white px-10 py-8">
       <Form id="post-add-form" onSubmit={handleSubmit}>
         <Form.Header>
           <div className="flex items-center justify-between pb-4 sm:border-0 sm:pb-0">
