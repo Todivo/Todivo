@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Comment } from "@/apis/comments";
 import { useUpdateComment } from "../../hooks/useUpdateComment";
+import Image from "next/image";
 
 export default function CommentList({ comment }: { comment: Comment }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -52,10 +53,12 @@ export default function CommentList({ comment }: { comment: Comment }) {
       ) : (
         <div className="flex flex-col gap-1">
           <div className="flex gap-1">
-            <img
+            <Image
+              width={8}
+              height={8}
               src={comment.writer.image ?? "/images/user-thumbnail.png"}
               alt="썸네일"
-              className="inline-block h-8 w-8 rounded-full object-cover"
+              className="inline-block rounded-full object-cover"
             />
             <span className="text-text-secondary">{comment.writer.name}</span>
           </div>
@@ -83,11 +86,11 @@ export default function CommentList({ comment }: { comment: Comment }) {
         <>
           <button
             onClick={startEditing}
-            className="hidden text-text-secondary group-hover:inline"
+            className="text-text-secondary opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-primary"
           >
             수정
           </button>
-          <button className="hidden text-text-secondary group-hover:inline">
+          <button className="text-text-secondary opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-primary">
             삭제
           </button>
         </>
