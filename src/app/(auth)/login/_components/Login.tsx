@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +15,7 @@ const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
 
 export default function Login() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -40,6 +42,8 @@ export default function Login() {
         throw new Error(data.message ?? "로그인에 실패했습니다.");
       }
 
+      // 이전 계정으로 받아둔 사용자별 데이터(댓글 isLiked 등)가 남지 않도록 캐시 비우기
+      queryClient.clear();
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
       router.push("/board");
