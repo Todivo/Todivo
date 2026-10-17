@@ -57,7 +57,7 @@ export default function Sidebar({
         <IoChevronForward />
       </div>
 
-      <nav className="flex shrink-0 items-center gap-2 pl-8">
+      <Link href="/" className="flex shrink-0 items-center gap-2 pl-8">
         <Image
           src="/images/todivo_logo_primary.svg"
           alt="투디보 로고"
@@ -67,12 +67,17 @@ export default function Sidebar({
         <p className="pl-1 font-baloo text-4xl font-bold text-primary">
           todivo
         </p>
-      </nav>
+      </Link>
 
       <ul className="flex flex-1 flex-col overflow-y-auto pt-7">
-        <li className="flex items-center gap-2 py-5 pl-13 text-[18px] text-foreground">
-          <IoGrid className="text-gray-400" />
-          대시보드
+        <li>
+          <Link
+            href="/"
+            className="flex items-center gap-2 py-5 pl-13 text-[18px] text-foreground"
+          >
+            <IoGrid className="text-gray-400" />
+            대시보드
+          </Link>
         </li>
 
         <li className="px-8">
