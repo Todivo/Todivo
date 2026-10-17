@@ -15,26 +15,27 @@ export default function Dashboard() {
 
   return (
     <>
-      <h2 className="text-2xl">체다치즈님의 대시보드</h2>
+      <h2 className="mb-10 text-2xl">체다치즈님의 대시보드</h2>
       <div className="flex items-center justify-between">
         <section>
           <div className="flex items-center justify-between">
-            <h2 className="flex text-lg">
+            <h2 className="mb-2 flex text-lg">
               <Image
                 width={40}
                 height={40}
                 src="/images/img_goal.png"
+                className="mr-3"
                 alt="목표 아이콘"
               />
               목표별 할일
             </h2>
-            <Link href="/" className="text-[#2DD4BF]">
+            <Link href="/" className="text-primary">
               모두보기 &gt;
             </Link>
           </div>
-          <div className="h-[256px] w-[640px] flex-1 rounded-[40px] bg-[#2DD4BF]">
+          <div className="h-[256px] w-[640px] flex-1 rounded-[40px] bg-primary">
             <ul className="p-6">
-              <li className="mb-2 flex">
+              <li className="mb-4 flex">
                 <input type="checkbox" className="mr-2" />
                 사용자 데이터 렌더링 구현
                 <div className="ml-auto flex gap-3">
@@ -46,7 +47,7 @@ export default function Dashboard() {
                   </button>
                 </div>
               </li>
-              <li className="mb-2 flex">
+              <li className="mb-4 flex">
                 <input type="checkbox" className="mr-2" />
                 실제 디자인 시스템 사례 조사
                 <div className="ml-auto flex gap-3">
@@ -58,7 +59,7 @@ export default function Dashboard() {
                   </button>
                 </div>
               </li>
-              <li className="mb-2 flex">
+              <li className="mb-4 flex">
                 <input type="checkbox" className="mr-2" />
                 개발 폴더 구조 세팅
                 <div className="ml-auto flex gap-3">
@@ -86,16 +87,17 @@ export default function Dashboard() {
           </div>
         </section>
         <section>
-          <h2 className="flex text-lg">
+          <h2 className="mb-2 flex text-lg">
             <Image
               width={40}
               height={40}
               src="/images/img_progress.png"
+              className="mr-3"
               alt="진행 아이콘"
             />
             내 진행 상황
           </h2>
-          <div className="flex h-[256px] w-[640px] flex-1 items-center justify-center gap-10 rounded-[40px] bg-[#1EACFF] p-6">
+          <div className="flex h-[256px] w-[640px] flex-1 items-center justify-center gap-10 rounded-[40px] bg-modal-blue p-6">
             {/* 도넛 차트 */}
             <svg
               width="160"
@@ -137,9 +139,9 @@ export default function Dashboard() {
         </section>
       </div>
       <section>
-        <h2 className="text-lg">검색된 할 일</h2>
-        <div className="flex flex-col items-center justify-center border-[1px] border-[#ccc] bg-white opacity-60">
-          <div className="relative w-[754px]">
+        <h2 className="mt-10 mb-4 text-lg">검색된 할 일</h2>
+        <div className="flex flex-col items-center justify-center rounded-[20px] border-[1px] border-[#ccc] bg-white px-4.5 py-20 opacity-60">
+          <div className="relative mb-10 w-[754px]">
             <input
               type="text"
               placeholder="할 일을 검색해주세요."
@@ -149,20 +151,20 @@ export default function Dashboard() {
           </div>
 
           <ul>
-            <li>
-              <input type="checkbox" />
+            <li className="pb-4">
+              <input type="checkbox" className="mr-2" />
               사용자 데이터 렌더링 구현
             </li>
-            <li>
-              <input type="checkbox" />
+            <li className="pb-4">
+              <input type="checkbox" className="mr-2" />
               실제 디자인 시스템 사레 조사
             </li>
-            <li>
-              <input type="checkbox" />
+            <li className="pb-4">
+              <input type="checkbox" className="mr-2" />
               개발 폴더 구조 세팅
             </li>
             <li>
-              <input type="checkbox" />
+              <input type="checkbox" className="mr-2" />
               강의 내용을 노션이나 문서에 요약 정리
             </li>
           </ul>
