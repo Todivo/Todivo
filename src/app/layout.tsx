@@ -32,11 +32,9 @@ export default function RootLayout({
       className={`h-full ${baloo.variable} ${pretendard.variable}`}
     >
       <body className="h-full">
-<<<<<<< HEAD
-        <Providers>{children}</Providers>
-=======
-        <main className="bg-[#f2f2f2] p-12">{children}</main>
->>>>>>> c30cb33664ada7c256270a6b3669bb35dfc57a2e
+        <Providers>
+          <main className="bg-[#f2f2f2] p-12">{children}</main>
+        </Providers>
       </body>
     </html>
   );
