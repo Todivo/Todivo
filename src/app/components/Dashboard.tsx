@@ -33,7 +33,7 @@ export default function Dashboard() {
               모두보기 &gt;
             </Link>
           </div>
-          <div className="h-[256px] w-[640px] flex-1 rounded-[40px] bg-primary">
+          <div className="h-[256px] w-[600px] flex-1 rounded-[40px] bg-primary">
             <ul className="p-6">
               <li className="mb-4 flex">
                 <input type="checkbox" className="mr-2" />
@@ -97,7 +97,7 @@ export default function Dashboard() {
             />
             내 진행 상황
           </h2>
-          <div className="flex h-[256px] w-[640px] flex-1 items-center justify-center gap-10 rounded-[40px] bg-modal-blue p-6">
+          <div className="flex h-[256px] w-[600px] flex-1 items-center justify-center gap-10 rounded-[40px] bg-modal-blue p-6">
             {/* 도넛 차트 */}
             <svg
               width="160"
