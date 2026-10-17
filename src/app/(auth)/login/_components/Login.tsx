@@ -2,10 +2,62 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginForm } from "@/schemas/auth";
+
+const BE_API_URL = process.env.NEXT_PUBLIC_BE_API_URL;
+const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
 
 export default function Login() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({ resolver: zodResolver(loginSchema) });
+
+  const onSubmit = async ({ email, password }: LoginForm) => {
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(`${BE_API_URL}${TEAM_ID}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message ?? "로그인에 실패했습니다.");
+      }
+
+      // 이전 계정으로 받아둔 사용자별 데이터(댓글 isLiked 등)가 남지 않도록 캐시 비우기
+      queryClient.clear();
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      router.push("/board");
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : "로그인 중 오류가 발생했습니다.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="mt-22 flex w-full flex-col items-center">
       <Link href="">
@@ -20,15 +72,25 @@ export default function Login() {
           todivo
         </h1>
       </Link>
-      <form className="flex flex-col items-center">
+      <form
+        className="flex flex-col items-center"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <input
           type="email"
+          {...register("email")}
           className="mb-4 h-14 w-100 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
           placeholder="이메일을 입력해주세요"
         />
+        {errors.email && (
+          <p className="-mt-3 mb-2 self-start text-sm text-red-500">
+            {errors.email.message}
+          </p>
+        )}
         <div className="relative">
           <input
             type={passwordVisible ? "text" : "password"}
+            {...register("password")}
             className="h-14 w-100 rounded-xl border border-gray-200 px-2 py-4 focus:ring-1 focus:ring-primary/60 focus:outline-none"
             placeholder="비밀번호를 입력해주세요"
           />
@@ -54,11 +116,17 @@ export default function Login() {
             )}
           </button>
         </div>
+        {errors.password && (
+          <p className="mt-1 self-start text-sm text-red-500">
+            {errors.password.message}
+          </p>
+        )}
         <button
-          className="mt-12 mb-6 h-14 w-100 rounded-xl bg-primary px-4 py-4 text-white"
+          className="mt-12 mb-6 h-14 w-100 rounded-xl bg-primary px-4 py-4 text-white disabled:opacity-60"
           type="submit"
+          disabled={isSubmitting}
         >
-          로그인하기
+          {isSubmitting ? "로그인 중..." : "로그인하기"}
         </button>
       </form>
       <p className="text-center text-sm">
@@ -66,7 +134,9 @@ export default function Login() {
         <Link
           href="/signup"
           className="inline-block self-center text-sm font-bold text-primary hover:underline"
-        ></Link>
+        >
+          회원가입
+        </Link>
       </p>
       <div className="my-6 flex items-center">
         <span className="mr-2 h-[1px] w-34 bg-gray-200"></span>

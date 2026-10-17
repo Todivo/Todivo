@@ -1,11 +1,15 @@
-import { ReactNode } from "react";
+import { FormHTMLAttributes, ReactNode } from "react";
 
-type FormProps = {
+type FormProps = FormHTMLAttributes<HTMLFormElement> & {
   children: ReactNode;
 };
 
-function Form({ children }: FormProps) {
-  return <form className="flex flex-col gap-6">{children}</form>;
+function Form({ children, className, ...props }: FormProps) {
+  return (
+    <form className={`flex flex-col gap-6 ${className ?? ""}`} {...props}>
+      {children}
+    </form>
+  );
 }
 
 type SectionProps = {
