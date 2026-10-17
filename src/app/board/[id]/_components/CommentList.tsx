@@ -56,11 +56,11 @@ export default function CommentList({ comment }: { comment: Comment }) {
         <div className="flex flex-col gap-1">
           <div className="flex gap-1">
             <Image
-              width={8}
-              height={8}
+              width={32}
+              height={32}
               src={comment.writer.image ?? "/images/user-thumbnail.png"}
               alt="썸네일"
-              className="inline-block rounded-full object-cover"
+              className="inline-block h-8 w-8 rounded-full object-cover"
             />
             <span className="text-text-secondary">{comment.writer.name}</span>
           </div>
