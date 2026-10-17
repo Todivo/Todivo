@@ -78,3 +78,31 @@ export async function getComments({
   if (!response.ok) throw new Error("댓글 목록을 불러오지 못했습니다.");
   return response.json();
 }
+
+export interface UpdateCommentParams {
+  postId: number;
+  commentId: number;
+  content: string;
+}
+
+export async function updateComment({
+  postId,
+  commentId,
+  content,
+}: UpdateCommentParams): Promise<Comment> {
+  const accessToken = localStorage.getItem("accessToken");
+
+  const response = await fetch(
+    `${BE_API_URL}${TEAM_ID}/posts/${postId}/comments/${commentId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
+      body: JSON.stringify({ content }),
+    },
+  );
+  if (!response.ok) throw new Error("댓글을 수정하지 못했습니다.");
+  return response.json();
+}
