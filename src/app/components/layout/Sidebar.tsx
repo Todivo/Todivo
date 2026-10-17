@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import {
   IoGrid,
@@ -17,32 +18,44 @@ import {
 } from "react-icons/io5";
 
 const navItems = [
-  { icon: IoCalendar, label: "캘린더" },
-  { icon: IoChatbubble, label: "소통 게시판" },
-  { icon: IoStar, label: "찜한 할 일" },
-  { icon: IoLogOut, label: "로그아웃" },
+  { icon: IoCalendar, label: "캘린더", href: undefined },
+  { icon: IoChatbubble, label: "소통 게시판", href: "/board" },
+  { icon: IoStar, label: "찜한 할 일", href: undefined },
+];
+
+interface Goal {
+  id: string | number;
+  title: string;
+  active?: boolean;
+}
+
+const defaultGoals: Goal[] = [
+  { id: 1, title: "자바스크립트로 웹 서비스 만들기", active: true },
+  { id: 2, title: "디자인 시스템 강의 듣기" },
 ];
 
 interface SidebarProps {
   userName: string;
   userEmail: string;
   userImage?: string;
+  goals?: Goal[];
 }
 
 export default function Sidebar({
   userName,
   userEmail,
   userImage = "/images/landing-goal.png",
+  goals = defaultGoals,
 }: SidebarProps) {
   const [isGoalOpen, setIsGoalOpen] = useState(false);
   const [isGoalActive, setIsGoalActive] = useState(false);
 
   return (
     <div className="relative flex h-full w-90 cursor-pointer flex-col rounded-r-3xl border-r border-text-secondary/20 bg-background pt-26 shadow-md">
-      <button className="absolute top-8 right-8 flex cursor-pointer items-center text-xl text-gray-300">
+      <div className="absolute top-8 right-8 flex items-center text-xl text-gray-300">
         <IoChevronForward className="-mr-3" />
         <IoChevronForward />
-      </button>
+      </div>
 
       <nav className="flex shrink-0 items-center gap-2 pl-8">
         <Image
@@ -64,6 +77,7 @@ export default function Sidebar({
 
         <li className="px-8">
           <button
+            type="button"
             onClick={() => {
               setIsGoalOpen((prev) => !prev);
               setIsGoalActive(true);
@@ -95,32 +109,56 @@ export default function Sidebar({
 
           {isGoalOpen && (
             <ul className="flex flex-col gap-3 py-3 pl-8">
-              <li className="text-[14px] font-bold text-primary">
-                자바스크립트로 웹 서비스 만들기
-              </li>
-              <li className="text-[14px] text-text-secondary">
-                디자인 시스템 강의 듣기
-              </li>
+              {goals.map((goal) => (
+                <li
+                  key={goal.id}
+                  className={`text-[14px] ${
+                    goal.active
+                      ? "font-bold text-primary"
+                      : "text-text-secondary"
+                  }`}
+                >
+                  {goal.title}
+                </li>
+              ))}
             </ul>
           )}
         </li>
 
-        {navItems.map(({ icon: Icon, label }) => (
-          <li
-            key={label}
-            className="flex items-center gap-2 py-5 pl-13 text-[18px] text-foreground"
-          >
-            <Icon className="text-gray-400" />
-            {label}
-          </li>
-        ))}
+        {navItems.map(({ icon: Icon, label, href }) => {
+          const itemClassName =
+            "flex items-center gap-2 py-5 pl-13 text-[18px] text-foreground";
+          const content = (
+            <>
+              <Icon className="text-gray-400" />
+              {label}
+            </>
+          );
+
+          return href ? (
+            <li key={label}>
+              <Link href={href} className={itemClassName}>
+                {content}
+              </Link>
+            </li>
+          ) : (
+            <li key={label} className={itemClassName}>
+              {content}
+            </li>
+          );
+        })}
+
+        <li className="flex items-center gap-2 py-5 pl-13 text-[18px] text-foreground">
+          <IoLogOut className="text-gray-400" />
+          로그아웃
+        </li>
       </ul>
 
-      <div className="flex shrink-0 flex-col gap-4 px-8 pb-6">
-        <button className="flex cursor-pointer items-center justify-center gap-2 rounded-4xl border border-primary py-5 text-primary">
+      <div className="flex shrink-0 cursor-pointer flex-col gap-4 px-8 pb-6">
+        <div className="flex items-center justify-center gap-2 rounded-4xl border border-primary py-5 text-primary">
           <IoCheckboxOutline className="text-xl" />
           새로운 할 일
-        </button>
+        </div>
 
         <div className="flex items-center justify-between pt-5 pb-5">
           <div className="flex items-center gap-2 rounded-full border border-gray-300 py-3 pr-21 pl-3">
@@ -146,10 +184,10 @@ export default function Sidebar({
             </div>
           </div>
 
-          <button className="relative cursor-pointer rounded-full border border-text-secondary/20 p-4.5">
+          <div className="relative rounded-full border border-text-secondary/20 p-4.5">
             <IoNotificationsOutline className="text-2xl text-gray-400" />
             <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-orange-400" />
-          </button>
+          </div>
         </div>
       </div>
     </div>
