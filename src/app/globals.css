@@ -53,6 +53,10 @@ body {
   --color-modal-skyblue: #d4efff;
   --color-modal-blue: #1eacff;
   --color-modal-orange: #ff8442;
+  --color-star: #ffcc00;
+  --color-bg-todo: #ff9e59;
+  --color-todo-icon: #ef6c00;
+
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 }
