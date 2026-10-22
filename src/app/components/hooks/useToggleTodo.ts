@@ -11,11 +11,12 @@ export function useToggleTodo() {
     // 응답을 기다리지 않고 체크 상태를 먼저 반영
     onMutate: async ({ id, done }) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] });
+      // 검색 결과(useInfiniteQuery)는 캐시 구조가 달라 목록 쿼리만 낙관적 갱신
       const previous = queryClient.getQueriesData<TodoResponse>({
-        queryKey: ["todos"],
+        queryKey: ["todos", "list"],
       });
       queryClient.setQueriesData<TodoResponse>(
-        { queryKey: ["todos"] },
+        { queryKey: ["todos", "list"] },
         (old) =>
           old
             ? {

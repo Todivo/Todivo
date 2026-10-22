@@ -32,8 +32,11 @@ export default function Dashboard() {
     data: searchData,
     isLoading: isSearching,
     isError: isSearchError,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
   } = useSearchTodos(keyword);
-  const searchedTodos = searchData?.todos ?? [];
+  const searchedTodos = searchData?.pages.flatMap((page) => page.todos) ?? [];
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -191,6 +194,15 @@ export default function Dashboard() {
                     </li>
                   ))}
                 </ul>
+              )}
+              {hasNextPage && (
+                <button
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
+                  className="mt-6"
+                >
+                  {isFetchingNextPage ? "불러오는 중..." : "더 불러오기"}
+                </button>
               )}
             </>
           )}
