@@ -30,7 +30,7 @@ export default function Dashboard() {
   const [keyword, setKeyword] = useState("");
   const {
     data: searchData,
-    isFetching: isSearching,
+    isLoading: isSearching,
     isError: isSearchError,
   } = useSearchTodos(keyword);
   const searchedTodos = searchData?.todos ?? [];
