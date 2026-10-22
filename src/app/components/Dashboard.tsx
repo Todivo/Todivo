@@ -187,8 +187,10 @@ export default function Dashboard() {
                       <input
                         type="checkbox"
                         checked={todo.done}
-                        readOnly
-                        className="mr-2"
+                        onChange={(e) =>
+                          toggleTodo({ id: todo.id, done: e.target.checked })
+                        }
+                        className="mr-2 cursor-pointer"
                       />
                       {todo.title}
                     </li>
