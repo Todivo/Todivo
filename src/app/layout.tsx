@@ -36,7 +36,7 @@ export default function RootLayout({
         <Providers>
           <div className="flex h-full">
             <Sidebar userName="체다치즈" userEmail="tdv11@email.kr" />
-            <main className="flex-1 overflow-y-auto bg-[#f2f2f2] p-12">
+            <main className="flex-1 overflow-y-auto bg-[#f2f2f2] px-4 pt-16 pb-8 sm:p-8 lg:p-12">
               {children}
             </main>
           </div>
