@@ -12,7 +12,13 @@ async function refreshAccessToken(): Promise<string | null> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refreshToken }),
     });
-    if (!res.ok) throw new Error("refresh failed");
+    if (!res.ok) {
+      if (res.status === 401) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+      }
+      return null;
+    }
 
     const data: { accessToken: string; refreshToken: string | null } =
       await res.json();
@@ -21,8 +27,6 @@ async function refreshAccessToken(): Promise<string | null> {
       localStorage.setItem("refreshToken", data.refreshToken);
     return data.accessToken;
   } catch {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
     return null;
   }
 }
