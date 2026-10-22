@@ -32,6 +32,7 @@ export default function Dashboard() {
     isError: isTodosError,
   } = useTodos(4);
   const todos = todosData?.todos ?? [];
+  const firstGoalId = todos.find((todo) => todo.goalId !== null)?.goalId;
   const { mutate: toggleTodo } = useToggleTodo();
   const { mutate: updateTodo, isPending: isUpdating } = useUpdateTodo();
   const { mutate: deleteTodo, isPending: isDeleting } = useDeleteTodo();
@@ -103,9 +104,11 @@ export default function Dashboard() {
               />
               목표별 할일
             </h2>
-            <Link href="/" className="text-primary">
-              모두보기 &gt;
-            </Link>
+            {firstGoalId && (
+              <Link href={`/goals/${firstGoalId}`} className="text-primary">
+                모두보기 &gt;
+              </Link>
+            )}
           </div>
           <div className="min-h-[256px] w-full rounded-[40px] bg-primary">
             <ul className="p-6">
