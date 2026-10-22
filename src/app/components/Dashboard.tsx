@@ -7,16 +7,23 @@ import { CiSearch } from "react-icons/ci";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GoPencil } from "react-icons/go";
 
+import useCountAnimation from "./hooks/useCountAnimation";
+import { useDeleteTodo } from "./hooks/useDeleteTodo";
+import { useMe } from "./hooks/useMe";
 import { useProgress } from "./hooks/useProgress";
 import { useSearchTodos } from "./hooks/useSearchTodos";
 import { useTodos } from "./hooks/useTodos";
 import { useToggleTodo } from "./hooks/useToggleTodo";
+import { useUpdateTodo } from "./hooks/useUpdateTodo";
 
 export default function Dashboard() {
+  const { data: me } = useMe();
+  const userName = me?.name ?? "";
   const progress = useProgress();
+  const { count: animatedProgress } = useCountAnimation(progress);
   const radius = 52;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - progress / 100);
+  const offset = circumference * (1 - animatedProgress / 100);
 
   const {
     data: todosData,
@@ -25,6 +32,42 @@ export default function Dashboard() {
   } = useTodos(4);
   const todos = todosData?.todos ?? [];
   const { mutate: toggleTodo } = useToggleTodo();
+  const { mutate: updateTodo, isPending: isUpdating } = useUpdateTodo();
+  const { mutate: deleteTodo, isPending: isDeleting } = useDeleteTodo();
+
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+
+  const startEdit = (id: number, title: string) => {
+    setEditingId(id);
+    setEditTitle(title);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditTitle("");
+  };
+
+  const handleEditSubmit = (
+    e: React.FormEvent<HTMLFormElement>,
+    id: number,
+  ) => {
+    e.preventDefault();
+    const title = editTitle.trim();
+    if (!title) return;
+    updateTodo(
+      { id, title },
+      {
+        onSuccess: cancelEdit,
+        onError: (error) => alert(error.message),
+      },
+    );
+  };
+
+  const handleDelete = (id: number) => {
+    if (!confirm("할 일을 삭제할까요?")) return;
+    deleteTodo(id, { onError: (error) => alert(error.message) });
+  };
 
   const [keywordInput, setKeywordInput] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -45,7 +88,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <h2 className="mb-10 text-2xl">체다치즈님의 대시보드</h2>
+      <h2 className="mb-10 text-2xl">{userName}님의 대시보드</h2>
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
         <section className="w-full min-w-0 lg:flex-1">
           <div className="flex items-center justify-between">
@@ -82,12 +125,46 @@ export default function Dashboard() {
                     }
                     className="mt-1 shrink-0 cursor-pointer self-start"
                   />
-                  <span className="break-keep">{todo.title}</span>
+                  {editingId === todo.id ? (
+                    <form
+                      onSubmit={(e) => handleEditSubmit(e, todo.id)}
+                      className="flex min-w-0 flex-1 gap-2"
+                    >
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        onKeyDown={(e) => e.key === "Escape" && cancelEdit()}
+                        maxLength={100}
+                        autoFocus
+                        className="min-w-0 flex-1 rounded-md bg-white px-2"
+                      />
+                      <button type="submit" disabled={isUpdating}>
+                        저장
+                      </button>
+                      <button type="button" onClick={cancelEdit}>
+                        취소
+                      </button>
+                    </form>
+                  ) : (
+                    <span className="break-keep">{todo.title}</span>
+                  )}
                   <div className="ml-auto flex shrink-0 gap-3 self-start">
-                    <button className="flex h-6 w-6 items-center justify-center rounded-full bg-white opacity-60">
+                    <button
+                      type="button"
+                      aria-label="할 일 수정"
+                      onClick={() => startEdit(todo.id, todo.title)}
+                      className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white opacity-60"
+                    >
                       <GoPencil />
                     </button>
-                    <button className="flex h-6 w-6 items-center justify-center rounded-full bg-white opacity-60">
+                    <button
+                      type="button"
+                      aria-label="할 일 삭제"
+                      onClick={() => handleDelete(todo.id)}
+                      disabled={isDeleting}
+                      className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white opacity-60"
+                    >
                       <FaRegTrashAlt />
                     </button>
                   </div>
@@ -139,10 +216,10 @@ export default function Dashboard() {
             </svg>
 
             <div className="flex flex-col">
-              <p className="text-lg text-white">체다치즈님의 진행도는</p>
+              <p className="text-lg text-white">{userName}님의 진행도는</p>
               <div className="flex items-end">
                 <span className="text-7xl font-bold text-white">
-                  {progress}
+                  {animatedProgress}
                 </span>
                 <span className="text-2xl text-white">%</span>
               </div>

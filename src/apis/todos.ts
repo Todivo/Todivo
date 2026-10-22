@@ -62,3 +62,11 @@ export async function updateTodo(
   if (!response.ok) throw new Error("할 일을 수정하지 못했습니다.");
   return response.json();
 }
+
+export async function deleteTodo(todoId: number): Promise<void> {
+  const response = await fetchWithAuth(`/todos/${todoId}`, {
+    method: "DELETE",
+  });
+  // 성공 시 204 No Content라 응답 본문이 없음
+  if (!response.ok) throw new Error("할 일을 삭제하지 못했습니다.");
+}
