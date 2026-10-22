@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GoPencil } from "react-icons/go";
 
+import Checkbox from "./Checkbox";
 import useCountAnimation from "./hooks/useCountAnimation";
 import { useDeleteTodo } from "./hooks/useDeleteTodo";
 import { useMe } from "./hooks/useMe";
@@ -117,13 +118,13 @@ export default function Dashboard() {
               )}
               {todos.map((todo) => (
                 <li key={todo.id} className="mb-4 flex gap-3 last:mb-2">
-                  <input
-                    type="checkbox"
+                  <Checkbox
+                    variant="inverse"
                     checked={todo.done}
                     onChange={(e) =>
                       toggleTodo({ id: todo.id, done: e.target.checked })
                     }
-                    className="mt-1 shrink-0 cursor-pointer self-start"
+                    className="mt-1 self-start"
                   />
                   {editingId === todo.id ? (
                     <form
@@ -260,14 +261,15 @@ export default function Dashboard() {
               ) : (
                 <ul>
                   {searchedTodos.map((todo) => (
-                    <li key={todo.id} className="pb-4 last:pb-0">
-                      <input
-                        type="checkbox"
+                    <li
+                      key={todo.id}
+                      className="flex items-center gap-2 pb-4 last:pb-0"
+                    >
+                      <Checkbox
                         checked={todo.done}
                         onChange={(e) =>
                           toggleTodo({ id: todo.id, done: e.target.checked })
                         }
-                        className="mr-2 cursor-pointer"
                       />
                       {todo.title}
                     </li>
