@@ -35,10 +35,10 @@ function Modal({ isOpen, onClose, title, children }: ModalProps) {
       <div
         role="dialog"
         aria-modal="true"
-        className="max-h-[90vh] w-full max-w-110 overflow-y-auto rounded-[40px] bg-white p-8"
+        className="flex max-h-[90vh] w-full max-w-110 flex-col overflow-hidden rounded-[40px] bg-white py-8"
         onClick={(e) => e.stopPropagation()} //안쪽 클릭은 닫히지 않게
       >
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex shrink-0 items-center justify-between px-8">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button
             type="button"
@@ -49,7 +49,10 @@ function Modal({ isOpen, onClose, title, children }: ModalProps) {
             <IoClose className="size-6" />
           </button>
         </div>
-        {children}
+        {/* 스크롤 영역을 안쪽으로 들여 둥근 모서리에 스크롤바가 잘리지 않게 */}
+        <div className="scrollbar-custom mr-3 overflow-y-auto pr-5 pl-8">
+          {children}
+        </div>
       </div>
     </div>,
     document.body,
