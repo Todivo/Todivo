@@ -45,6 +45,25 @@ export async function getTodos({
   return response.json();
 }
 
+export interface CreateTodoBody {
+  title: string;
+  goalId?: number;
+  fileUrl?: string;
+  linkUrl?: string;
+  dueDate?: string;
+  tags?: string[];
+}
+
+export async function createTodo(body: CreateTodoBody): Promise<Todo> {
+  const response = await fetchWithAuth("/todos", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) throw new Error("할 일을 생성하지 못했습니다.");
+  return response.json();
+}
+
 export interface UpdateTodoBody {
   title?: string;
   done?: boolean;
