@@ -20,6 +20,8 @@ import {
   IoMenu,
   IoClose,
 } from "react-icons/io5";
+import TodoCreateForm from "../domain/TodoCreateForm";
+import Modal from "../Modal";
 
 const navItems = [
   { icon: IoCalendar, label: "캘린더", href: undefined },
@@ -70,6 +72,8 @@ export default function Sidebar({
     setIsOpen(false);
     setIsCollapsed(true);
   };
+
+  const [isTodoModalOpen, setIsTodoModalOpen] = useState(false);
 
   return (
     <>
@@ -276,10 +280,22 @@ export default function Sidebar({
         </ul>
 
         <div className="flex shrink-0 cursor-pointer flex-col gap-4 px-8 pb-6">
-          <div className="flex items-center justify-center gap-2 rounded-4xl border border-primary py-4 text-primary">
+          <button
+            type="button"
+            onClick={() => setIsTodoModalOpen(true)}
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-4xl border border-primary py-4 text-primary"
+          >
             <IoCheckboxOutline className="text-xl" />
             새로운 할 일
-          </div>
+          </button>
+
+          <Modal
+            isOpen={isTodoModalOpen}
+            onClose={() => setIsTodoModalOpen(false)}
+            title="할 일 생성"
+          >
+            <TodoCreateForm onClose={() => setIsTodoModalOpen(false)} />
+          </Modal>
 
           <div className="flex items-center justify-between pt-5 pb-5">
             <div className="flex items-center gap-2 rounded-full border border-gray-300 py-3 pr-21 pl-3">

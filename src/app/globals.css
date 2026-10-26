@@ -24,6 +24,32 @@ body {
   color: var(--color-text-secondary);
 }
 
+/* 얇고 둥근 커스텀 스크롤바 */
+@utility scrollbar-custom {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #d4d4d4;
+    border-radius: 9999px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #a3a3a3;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  /* Firefox */
+  @supports not selector(::-webkit-scrollbar) {
+    scrollbar-width: thin;
+    scrollbar-color: #d4d4d4 transparent;
+  }
+}
+
 /* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
